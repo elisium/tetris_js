@@ -41,22 +41,74 @@ Tetris.prototype.draw = function() {
 	$(gameInfo).append('<p class=tg_info_p>Level:</p>');
 	$(gameInfo).append('<p class=tg_info_p id=tg_level_text>1</p>');
 	var gameInfoNext = $('.tg_info_next', gameInfo);
+	this.preview = $(gameInfoNext);
 	$(gameInfoNext).css('width', this.PREVIEW_BLOCK_SIZE*(this.FIGURE_MAX_SIZE+2)+'px').css('height', this.PREVIEW_BLOCK_SIZE*(this.FIGURE_MAX_SIZE+2)+'px');
 	for (i=0; i<this.FIGURE_MAX_SIZE+2; i++)
 		for (j=0; j<this.FIGURE_MAX_SIZE+2; j++)
 			$(gameInfoNext).append('<div class=tg_gamefield_block_blank></div>');
 	$('.tg_gamefield_block_blank', gameInfoNext).css('width', this.PREVIEW_BLOCK_SIZE+'px').css('height', this.PREVIEW_BLOCK_SIZE+'px');
 	$(this.initObject).append('<p class=tg_credits>by Alexey Gaev</p>');
+	
+	this.figures = [];
+	var presentaions = [];
+	presentaions[0] = [[0,1,0],[1,1,1],[0,0,0]]; //t
+	presentaions[1] = [[0,1,0,0],[0,1,0,0],[0,1,0,0],[0,1,0,0]]; //I
+	presentaions[2] = [[0,1,1],[0,1,0],[0,1,0]]; //r
+	presentaions[3] = [[1,1,0],[0,1,0],[0,1,0]]; //L
+	presentaions[4] = [[1,1],[1,1]]; //′
+	presentaions[5] = [[1,1,0],[0,1,1],[0,0,0]]; //z
+	presentaions[6] = [[0,1,1],[1,1,0],[0,0,0]]; //s
+
+	this.figures[0] = new Figure(presentaions[0], 'green');
+	this.figures[1] = new Figure(presentaions[1], 'red');
+	this.figures[2] = new Figure(presentaions[2], 'yellow');
+	this.figures[3] = new Figure(presentaions[3], 'blue');
+	this.figures[4] = new Figure(presentaions[4], 'magenta');
+	this.figures[5] = new Figure(presentaions[5], 'grey');
+	this.figures[6] = new Figure(presentaions[6], 'brown');
 }
-Tetris.prototype.start = function() {}
+Tetris.prototype.start = function() {
+	var score = 0; //Starting score
+	var scoreRate = 2; //Single row score
+	var scoreBonus = 1.5; //Bonus for every additional row
+	var scoreForLevel = 20; //Score needed for level
+	var scoreForLevelNext = 1.5; //Score append for every next level
+	var level = 1; //Starting level
+	var levelSpeed = 2000; //Speed for level 1 (timeout in ms)
+	var levelSpeedNext = 0.8; //Speed boost for every level;
+
+	makePreview(this.figures, this.preview, this.PREVIEW_BLOCK_SIZE);
+
+	function makePreview(figures, previewObj, previeBlockSize) {
+		if (!$('.tg_figure_preview', previewObj).length) $(previewObj).append('<div class=tg_figure_preview></div>');
+		var previewDiv = $('.tg_figure_preview', previewObj);
+		var figure = figures[Math.floor(Math.random()*figures.length)];
+		var previewFSize = figure.presentation.length;
+		$(previewDiv).css('width', previewFSize*previeBlockSize + 'px').css('height', previewFSize*previeBlockSize + 'px').css('left', previeBlockSize+'px').css('top',previeBlockSize+'px');
+		for (i=0;i<previewFSize;i++)
+			for (j=0;j<previewFSize;j++) {
+				var blockClass = figure.presentation[i][j]==0 ? '' : 'colored';
+				$(previewDiv).append('<div class="tg_figure_block '+blockClass+'"></div>');
+			}
+		$('.tg_figure_block', previewDiv).css('width', previeBlockSize + 'px').css('height', previeBlockSize + 'px');
+		$('.tg_figure_block.colored', previewDiv).css('backgroundColor', figure.color);
+	}
+}
 Tetris.prototype.pause = function() {}
 Tetris.prototype.resume = function() {}
 Tetris.prototype.clear = function() {}
 
 /*
  * Figure class is for basic tetris figure presentation
+ * properties:
+ * size: size of the figure in blocks;
+ * methods:
  */
 
-function Figure() {
-
+function Figure(presentation, color) {
+	this.presentation = presentation;
+	this.color = color;
 }
+
+Figure.prototype.rotate = function() {}
+Figure.prototype.draw = function() {}
