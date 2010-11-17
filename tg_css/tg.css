@@ -25,10 +25,22 @@
 	background: white;
 	margin: 5px auto;
 	padding: 1px;
+	position: relative;
 	-webkit-box-shadow: 0px 0px 5px green;
 	box-shadow: 0px 0px 5px green;
 }
 
+.tg_figure_preview {
+	position: absolute;
+	padding: 1px;
+}
+.tg_figure_block {
+	float: left;
+}
+.tg_figure_block.colored {
+	-webkit-box-shadow: 1px 1px 2px gray;
+	box-shadow: 1px 1px 2px gray;
+}
 .tg_info_p {
 	font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
 	font-size: 16px;
