@@ -85,11 +85,7 @@ Tetris.prototype.start = function() {
 		var figure = figures[Math.floor(Math.random()*figures.length)];
 		var previewFSize = figure.presentation.length;
 		$(previewDiv).css('width', previewFSize*previeBlockSize + 'px').css('height', previewFSize*previeBlockSize + 'px').css('left', previeBlockSize+'px').css('top',previeBlockSize+'px');
-		for (i=0;i<previewFSize;i++)
-			for (j=0;j<previewFSize;j++) {
-				var blockClass = figure.presentation[i][j]==0 ? '' : 'colored';
-				$(previewDiv).append('<div class="tg_figure_block '+blockClass+'"></div>');
-			}
+		figure.draw(previewDiv);
 		$('.tg_figure_block', previewDiv).css('width', previeBlockSize + 'px').css('height', previeBlockSize + 'px');
 		$('.tg_figure_block.colored', previewDiv).css('backgroundColor', figure.color);
 	}
@@ -110,5 +106,13 @@ function Figure(presentation, color) {
 	this.color = color;
 }
 
+Figure.prototype.draw = function(container) {
+	var previewFSize = this.presentation.length;
+	for (i=0;i<previewFSize;i++)
+		for (j=0;j<previewFSize;j++) {
+			var blockClass = this.presentation[i][j]==0 ? '' : 'colored';
+			$(container).append('<div class="tg_figure_block '+blockClass+'"></div>');
+		}
+}
+
 Figure.prototype.rotate = function() {}
-Figure.prototype.draw = function() {}
