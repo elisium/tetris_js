@@ -1,0 +1,21 @@
+.tg_gamefield {
+	float: left;
+	position: relative;
+	padding: 1px;
+	-webkit-box-shadow: 0px 0px 5px green;
+	box-shadow: 0px 0px 5px green;
+}
+
+.tg_gamefield_block_blank {
+	float: left;
+	outline: 1px dotted #ddd;
+}
+
+.tg_gameinfo {
+	float: left;
+	width: 150px;
+	min-height: 200px;
+	margin-left: 10px;
+	-webkit-box-shadow: 0px 0px 5px green;
+	box-shadow: 0px 0px 5px green;
+}

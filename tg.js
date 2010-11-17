@@ -18,6 +18,18 @@ function Tetris(initObj, tWidth, tHeight, bSize) {
 
 Tetris.prototype.draw = function() {
 	$(this.initObject).append('<div class=tg_gamefield></div>');
+	var gameField = $('.tg_gamefield', this.initObject);
+	$(gameField).css('width', this.width*this.blockSize +'px').css('height', this.height*this.blockSize +'px');
+	for (i=0; i<this.width; i++) {
+		var hLine = new Array();
+		for (j=0; j<this.height; j++) {
+			$(gameField).append('<div class=tg_gamefield_block_blank></div>');
+			hLine.push(0);
+		}
+		this.gameField.push(hLine);
+	}
+	$('.tg_gamefield_block_blank', gameField).css('width', this.blockSize+'px').css('height', this.blockSize+'px');
+	$(this.initObject).append('<div class=tg_gameinfo></div>');
 }
 Tetris.prototype.start = function() {}
 Tetris.prototype.pause = function() {}
