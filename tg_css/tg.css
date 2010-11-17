@@ -16,6 +16,50 @@
 	width: 150px;
 	min-height: 200px;
 	margin-left: 10px;
+	background: #ddd;
 	-webkit-box-shadow: 0px 0px 5px green;
 	box-shadow: 0px 0px 5px green;
+}
+
+.tg_info_next {
+	background: white;
+	margin: 5px auto;
+	padding: 1px;
+	-webkit-box-shadow: 0px 0px 5px green;
+	box-shadow: 0px 0px 5px green;
+}
+
+.tg_info_p {
+	font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	margin: 0 5px;
+	padding: 5px 0;
+	color: #222;
+	text-shadow: -1px -1px 1px white;
+	border-bottom: 1px solid #ccc;
+}
+
+.tg_info_p:last-child {
+	border-bottom: none;
+}
+
+#tg_score_text {
+	padding-left: 20px;
+	font-weight: bold;
+	color: red;
+}
+
+#tg_level_text {
+	padding-left: 20px;
+	font-weight: bold;
+	color: red;
+}
+
+.tg_credits {
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+	text-align: right;
+	font-size: 10px;
+	font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
 }
