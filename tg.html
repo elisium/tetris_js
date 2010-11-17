@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>TG</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" href="tg_css/tg.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+		<script src="tg.js"></script>
+		<script>
+			$(document).ready(function(){
+				var tetris = new Tetris($('#tg_container'), 10, 50, 20);
+				tetris.draw();
+				tetris.start();
+			})
+		</script>
+		<style>
+			#tg_container {
+				display: inline-block;
+				margin: 10px;
+				-webkit-box-shadow: 0px 0px 5px green;
+				box-shadow: 1px 1px 1px black;
+			}
+		</style>
+	</head>
+<body>
+    <div id="controls">
+		
+	</div>
+	<div id="tg_container">
+	</div>
+</body>
+</html>
