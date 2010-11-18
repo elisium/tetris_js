@@ -82,6 +82,8 @@ Tetris.prototype.start = function() {
 
 	var currentPreviewFigure; //figure, that is displaying in next field
 
+	var bsize = this.blockSize;
+
 	makePreview(this.figures, this.preview, this.PREVIEW_BLOCK_SIZE);
 
 	$(this.field).append('<div class=tg_figure_fall></div>');
@@ -96,6 +98,22 @@ Tetris.prototype.start = function() {
 	
 	this.timeout = setTimeout(fall, levelSpeed, this.blockSize, false);
 
+	$(document).keyup(function(event){
+		switch (event.keyCode){
+			case 37:
+				move('left', bsize);
+				break;
+			case 39:
+				move('right', bsize);
+				break;
+			case 40:
+				move('down', bsize);
+				break;
+			default:
+				break;
+		}
+	})
+
 	function fall(offset, stop) {
 		if (checkCollision('fall')) {
 			$(figureFallDiv).css('top', (parseInt($(figureFallDiv).css('top'))+offset)+'px');
@@ -104,7 +122,23 @@ Tetris.prototype.start = function() {
 		}
 		if (!stop) t=setTimeout(fall, levelSpeed, offset);
 	}
-
+	function move(direction, offset) {
+		if (checkCollision(direction)) {
+			switch(direction) {
+				case 'left':
+					$(figureFallDiv).css('left', (parseInt($(figureFallDiv).css('left'))-offset)+'px');
+					break;
+				case 'right':
+					$(figureFallDiv).css('left', (parseInt($(figureFallDiv).css('left'))+offset)+'px');
+					break;
+				case 'down':
+					$(figureFallDiv).css('top', (parseInt($(figureFallDiv).css('top'))+offset)+'px');
+					break;
+				default:
+					break;
+			}
+		}
+	}
 	function checkCollision(direction) {
 		return true;
 	}
