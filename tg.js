@@ -87,6 +87,7 @@ Tetris.prototype.start = function() {
 	makePreview(this.figures, this.preview, this.PREVIEW_BLOCK_SIZE);
 
 	$(this.field).append('<div class=tg_figure_fall></div>');
+	var gameField = $(this.field);
 	var figureFallDiv = $('.tg_figure_fall', this.field);
 
 	var figureFall = this.figures[Math.floor(Math.random()*this.figures.length)];
@@ -96,7 +97,7 @@ Tetris.prototype.start = function() {
 	$('.tg_figure_block.colored', figureFallDiv).css('backgroundColor', figureFall.color);
 	$(figureFallDiv).css('left', Math.floor((this.width-figureFall.presentation.length+1)/2)*this.blockSize+'px').css('top','0').css('width', this.blockSize*figureFall.presentation.length+'px');
 	
-	this.timeout = setTimeout(fall, levelSpeed, this.blockSize, false);
+	this.timeout = setTimeout(fall, levelSpeed, this.blockSize, this.timeout);
 
 	$(document).keyup(function(event){
 		switch (event.keyCode){
@@ -109,18 +110,21 @@ Tetris.prototype.start = function() {
 			case 40:
 				move('down', bsize);
 				break;
+			case 38:
+				rotate();
+				break;
 			default:
 				break;
 		}
 	})
 
-	function fall(offset, stop) {
+	function fall(offset, timer) {
 		if (checkCollision('fall')) {
 			$(figureFallDiv).css('top', (parseInt($(figureFallDiv).css('top'))+offset)+'px');
+			timer=setTimeout(fall, levelSpeed, offset, timer);
 		} else {
 			
 		}
-		if (!stop) t=setTimeout(fall, levelSpeed, offset);
 	}
 	function move(direction, offset) {
 		if (checkCollision(direction)) {
@@ -139,8 +143,37 @@ Tetris.prototype.start = function() {
 			}
 		}
 	}
+	function iterate() {
+		
+	}
+	function rotate() {
+		
+	}
+
+	var fieldOffset = $(gameField).offset();
+	var leftBorder = fieldOffset.left;
+	var rightBorder = fieldOffset.left+$(gameField).width();
+	var bottomBorder = fieldOffset.top+$(gameField).height();
 	function checkCollision(direction) {
-		return true;
+		var willNotMakeCollision = true;
+		//$('.tg_figure_block.colored',figureFallDiv).each(function(index){
+		for (i=0; i<$('.tg_figure_block.colored',figureFallDiv).length; i++) {
+			var blockOffset = $($('.tg_figure_block.colored',figureFallDiv)[i]).offset();
+			switch(direction){
+				case 'left':
+					willNotMakeCollision = (blockOffset.left-bsize<leftBorder) ? false : true;
+					break;
+				case 'right':
+					willNotMakeCollision = (blockOffset.left+bsize>rightBorder) ? false : true;
+					break;
+				default:
+					willNotMakeCollision = (blockOffset.top+bsize>bottomBorder) ? false : true;
+					if (!willNotMakeCollision) iterate();
+					break;
+			}
+			if (!willNotMakeCollision) break;
+		}
+		return willNotMakeCollision;
 	}
 
 	function makePreview(figures, previewObj, previeBlockSize) {
