@@ -82,22 +82,22 @@ Tetris.prototype.start = function() {
 
 	var currentPreviewFigure; //figure, that is displaying in next field
 
-	var bsize = this.blockSize;
+	var bsize = this.blockSize; //size of the single block in the game field
+	var gameFieldWidth = this.width;
+	var figures = this.figures;
+	var preview = this.preview;
+	var previewSize = this.PREVIEW_BLOCK_SIZE;
 
-	makePreview(this.figures, this.preview, this.PREVIEW_BLOCK_SIZE);
+	makePreview(figures, preview, previewSize); //creating first preview
 
-	$(this.field).append('<div class=tg_figure_fall></div>');
-	var gameField = $(this.field);
-	var figureFallDiv = $('.tg_figure_fall', this.field);
-
-	var figureFall = this.figures[Math.floor(Math.random()*this.figures.length)];
-
-	figureFall.draw(figureFallDiv);
-	$('.tg_figure_block', figureFallDiv).css('width', this.blockSize + 'px').css('height', this.blockSize + 'px');
-	$('.tg_figure_block.colored', figureFallDiv).css('backgroundColor', figureFall.color);
-	$(figureFallDiv).css('left', Math.floor((this.width-figureFall.presentation.length+1)/2)*this.blockSize+'px').css('top','0').css('width', this.blockSize*figureFall.presentation.length+'px');
+	$(this.field).append('<div class=tg_figure_fall></div>'); //creating container for falling figures
+	var gameFieldArr = this.gameField; //get the start state of the game field array
+	var gameField = $(this.field); //get the game field container
+	var figureFallDiv = $('.tg_figure_fall', this.field); //remember the falling figures's container
+	var figureFall = this.figures[Math.floor(Math.random()*this.figures.length)]; //pick first falling figure
+	placeOnStart();
 	
-	this.timeout = setTimeout(fall, levelSpeed, this.blockSize, this.timeout);
+	var timeout = setTimeout(fall, 0, this.blockSize, timeout);
 
 	$(document).keyup(function(event){
 		switch (event.keyCode){
@@ -117,10 +117,25 @@ Tetris.prototype.start = function() {
 				break;
 		}
 	})
-
+	function iterate() {
+		figureFall = currentPreviewFigure;
+		figureFall.draw(figureFallDiv);
+		placeOnStart();
+		makePreview(figures, preview, previewSize);
+		fall(bsize, timeout)
+	}
+	function placeOnStart() {
+		figureFall.draw(figureFallDiv);
+		$('.tg_figure_block', figureFallDiv).css('width', bsize + 'px').css('height', bsize + 'px');
+		$('.tg_figure_block.colored', figureFallDiv).css('backgroundColor', figureFall.color);
+		figureFall.x = Math.floor((gameFieldWidth-figureFall.presentation.length+1)/2);
+		figureFall.y = -1;
+		$(figureFallDiv).css('left', figureFall.x*bsize+'px').css('top','-'+bsize+'px').css('width', bsize*figureFall.presentation.length+'px');
+	}
 	function fall(offset, timer) {
 		if (checkCollision('fall')) {
 			$(figureFallDiv).css('top', (parseInt($(figureFallDiv).css('top'))+offset)+'px');
+			figureFall.y++;
 			timer=setTimeout(fall, levelSpeed, offset, timer);
 		} else {
 			
@@ -131,20 +146,20 @@ Tetris.prototype.start = function() {
 			switch(direction) {
 				case 'left':
 					$(figureFallDiv).css('left', (parseInt($(figureFallDiv).css('left'))-offset)+'px');
+					figureFall.x--;
 					break;
 				case 'right':
 					$(figureFallDiv).css('left', (parseInt($(figureFallDiv).css('left'))+offset)+'px');
+					figureFall.x++;
 					break;
 				case 'down':
 					$(figureFallDiv).css('top', (parseInt($(figureFallDiv).css('top'))+offset)+'px');
+					figureFall.y++;
 					break;
 				default:
 					break;
 			}
 		}
-	}
-	function iterate() {
-		
 	}
 	function rotate() {
 		
@@ -177,9 +192,10 @@ Tetris.prototype.start = function() {
 	}
 
 	function makePreview(figures, previewObj, previeBlockSize) {
-		if (!$('.tg_figure_preview', previewObj).length) $(previewObj).append('<div class=tg_figure_preview></div>');
+		if ($('.tg_figure_preview', previewObj).length) $('.tg_figure_preview', previewObj).remove();
+		$(previewObj).append('<div class=tg_figure_preview></div>');
 		var previewDiv = $('.tg_figure_preview', previewObj);
-		var currentPreviewFigure = figures[Math.floor(Math.random()*figures.length)];
+		currentPreviewFigure = figures[Math.floor(Math.random()*figures.length)];
 		var previewFSize = currentPreviewFigure.presentation.length;
 		$(previewDiv).css('width', previewFSize*previeBlockSize + 'px').css('height', previewFSize*previeBlockSize + 'px').css('left', previeBlockSize+'px').css('top',previeBlockSize+'px');
 		currentPreviewFigure.draw(previewDiv);
@@ -204,6 +220,7 @@ function Figure(presentation, color) {
 }
 
 Figure.prototype.draw = function(container) {
+	$(container).html('');
 	var previewFSize = this.presentation.length;
 	for (i=0;i<previewFSize;i++)
 		for (j=0;j<previewFSize;j++) {
