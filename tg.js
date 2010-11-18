@@ -97,8 +97,12 @@ Tetris.prototype.start = function() {
 	this.timeout = setTimeout(fall, levelSpeed, this.blockSize, false);
 
 	function fall(offset, stop) {
-		$(figureFallDiv).css('top', (parseInt($(figureFallDiv).css('top'))+offset)+'px');
-		if (!stop) t=setTimeout(moveFigure, levelSpeed, offset);
+		if (checkCollision('fall')) {
+			$(figureFallDiv).css('top', (parseInt($(figureFallDiv).css('top'))+offset)+'px');
+		} else {
+			
+		}
+		if (!stop) t=setTimeout(fall, levelSpeed, offset);
 	}
 
 	function checkCollision(direction) {
