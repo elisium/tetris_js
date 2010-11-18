@@ -2,8 +2,14 @@
 	float: left;
 	position: relative;
 	padding: 1px;
+	overflow: hidden;
 	-webkit-box-shadow: 0px 0px 5px green;
 	box-shadow: 0px 0px 5px green;
+}
+
+.tg_figure_fall {
+	position: absolute;
+	padding: 1px;
 }
 
 .tg_gamefield_block_blank {
