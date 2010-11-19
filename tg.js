@@ -56,7 +56,7 @@ Tetris.prototype.draw = function() {
 	presentaions[1] = [[0,1,0,0],[0,1,0,0],[0,1,0,0],[0,1,0,0]]; //I
 	presentaions[2] = [[0,1,1],[0,1,0],[0,1,0]]; //r
 	presentaions[3] = [[1,1,0],[0,1,0],[0,1,0]]; //L
-	presentaions[4] = [[1,1],[1,1]]; //′
+	presentaions[4] = [[1,1],[1,1]]; //cube
 	presentaions[5] = [[1,1,0],[0,1,1],[0,0,0]]; //z
 	presentaions[6] = [[0,1,1],[1,1,0],[0,0,0]]; //s
 
@@ -75,7 +75,7 @@ Tetris.prototype.start = function() {
 	var scoreForLevel = 20; //Score needed for level
 	var scoreForLevelNext = 1.5; //Score append for every next level
 	var level = 1; //Starting level
-	var levelSpeed = 500; //Speed for level 1 (timeout in ms)
+	var levelSpeed = 800; //Speed for level 1 (timeout in ms)
 	var levelSpeedNext = 0.8; //Speed boost for every level;
 
 	var gameOver = false; //game over indicator
@@ -84,6 +84,7 @@ Tetris.prototype.start = function() {
 
 	var bsize = this.blockSize; //size of the single block in the game field
 	var gameFieldWidth = this.width;
+	var gameFieldHeight = this.height;
 	var figures = this.figures;
 	var preview = this.preview;
 	var previewSize = this.PREVIEW_BLOCK_SIZE;
@@ -99,7 +100,7 @@ Tetris.prototype.start = function() {
 	
 	var timeout = setTimeout(fall, 0, this.blockSize, timeout);
 
-	$(document).keyup(function(event){
+	$(document).keydown(function(event){
 		switch (event.keyCode){
 			case 37:
 				move('left', bsize);
@@ -118,11 +119,19 @@ Tetris.prototype.start = function() {
 		}
 	})
 	function iterate() {
+		clearTimeout(timeout);
+		var Bi = 0;
+		var Bj = 0;
+		for (Fi = 0; Fi<gameFieldWidth; Fi++)
+			for (Fj = 0; Fj<gameFieldHeight; Fj++) {
+
+			}
+
 		figureFall = currentPreviewFigure;
 		figureFall.draw(figureFallDiv);
 		placeOnStart();
 		makePreview(figures, preview, previewSize);
-		fall(bsize, timeout)
+		fall(bsize);
 	}
 	function placeOnStart() {
 		figureFall.draw(figureFallDiv);
@@ -132,11 +141,11 @@ Tetris.prototype.start = function() {
 		figureFall.y = -1;
 		$(figureFallDiv).css('left', figureFall.x*bsize+'px').css('top','-'+bsize+'px').css('width', bsize*figureFall.presentation.length+'px');
 	}
-	function fall(offset, timer) {
+	function fall(offset) {
 		if (checkCollision('fall')) {
 			$(figureFallDiv).css('top', (parseInt($(figureFallDiv).css('top'))+offset)+'px');
 			figureFall.y++;
-			timer=setTimeout(fall, levelSpeed, offset, timer);
+			timeout=setTimeout(fall, levelSpeed, offset);
 		} else {
 			
 		}
