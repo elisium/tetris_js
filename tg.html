@@ -3,16 +3,7 @@
 	<head>
 		<title>TG</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<script src="jquery.min.js"></script>
-		<script src="tg.js"></script>
 		<link rel="stylesheet" href="tg_css/tg.css" />
-		<script>
-			$(document).ready(function(){
-				var tetris = new Tetris($('#tg_container'), 10, 20, 20);
-				tetris.draw();
-				tetris.start();
-			})
-		</script>
 		<style>
 			* {margin:0;padding:0}
 			#tg_container {
@@ -30,5 +21,14 @@
 	</div>
 	<div id="tg_container">
 	</div>
+<script src="tg_canvas.js"></script>
+<script>
+	var tetrisOptions = {
+		/* possible to set tWidth and tHeight - size of game field, bSize - block size in px */
+	};
+	var tetris = new Tetris('tg_container'/*, tetrisOptions*/);
+
+	tetris.draw();
+</script>
 </body>
 </html>
